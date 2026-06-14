@@ -36,7 +36,7 @@ const SAMPLE_DATA = [
 ];
 
 const COLORS = {
-  high: '#b91c1c',
+  high: '#dc2626',
   medium: '#5b21b6',
   low: '#0369a1',
 };
@@ -376,9 +376,11 @@ export default function App() {
                       <Pie
                         data={chartDataPie}
                         cx="50%" cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={2}
+                        innerRadius={75}
+                        outerRadius={95}
+                        stroke="none"
+                        strokeWidth={0}
+                        paddingAngle={0}
                         dataKey="value"
                       >
                         {chartDataPie.map((entry, index) => (
@@ -407,7 +409,7 @@ export default function App() {
                 <div className="chart-title">Revenue by Risk Level</div>
                 <div className="chart-container">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartDataBar} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                    <BarChart data={chartDataBar} margin={{ top: 20, right: 30, left: 20, bottom: 5 }} barCategoryGap="40%">
                       <XAxis dataKey="name" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />
                       <RechartsTooltip 
@@ -415,7 +417,7 @@ export default function App() {
                         contentStyle={{ backgroundColor: '#0f1420', borderColor: '#1f2937', color: '#f3f4f6' }} 
                         formatter={(val) => `AED ${val}`}
                       />
-                      <Bar dataKey="revenue" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="revenue" radius={[4, 4, 0, 0]} barSize={32}>
                         {chartDataBar.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.fill} />
                         ))}

@@ -3,7 +3,7 @@
   --surface-color: #0f1420;
   --surface-secondary: #151c2c;
   --accent-color: #3b82f6;
-  --high-risk: #b91c1c;
+  --high-risk: #dc2626;
   --medium-risk: #5b21b6;
   --low-risk: #0369a1;
   --neutral-color: #6b7280;
@@ -401,7 +401,7 @@ tbody tr:hover {
   font-weight: 600;
 }
 
-.badge.high { background-color: rgba(185, 28, 28, 0.15); border: 1px solid rgba(185, 28, 28, 0.3); color: var(--high-risk); }
+.badge.high { background-color: rgba(220, 38, 38, 0.15); border: 1px solid rgba(220, 38, 38, 0.3); color: var(--high-risk); }
 .badge.medium { background-color: rgba(91, 33, 182, 0.15); border: 1px solid rgba(91, 33, 182, 0.3); color: var(--medium-risk); }
 .badge.low { background-color: rgba(3, 105, 161, 0.15); border: 1px solid rgba(3, 105, 161, 0.3); color: var(--low-risk); }
 
