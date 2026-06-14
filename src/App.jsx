@@ -3,11 +3,13 @@ import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import {
   Shield, Users, TrendingDown, HeartPulse, AlertTriangle,
-  UploadCloud, Search, ArrowUpDown, X, FileDown, Check
+  UploadCloud, Search, ArrowUpDown, X, FileDown, Check,
+  Linkedin, Github
 } from 'lucide-react';
 import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis,
-  Tooltip as RechartsTooltip, ResponsiveContainer, Legend
+  Tooltip as RechartsTooltip, ResponsiveContainer, Legend,
+  Label, LabelList
 } from 'recharts';
 
 const SAMPLE_DATA = [
@@ -69,7 +71,13 @@ const calculateRisk = (c) => {
   if (score < 40) riskLevel = 'High';
   else if (score <= 69) riskLevel = 'Medium';
 
-  return { ...c, health_score: score, risk_level: riskLevel, contacted: c.contacted || false };
+  return { 
+    ...c, 
+    health_score: score, 
+    risk_level: c.dismissed ? 'Low' : riskLevel, 
+    contacted: c.contacted || false,
+    dismissed: c.dismissed || false
+  };
 };
 
 export default function App() {
@@ -83,6 +91,7 @@ export default function App() {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const fileInputRef = useRef(null);
   const [detectedColumns, setDetectedColumns] = useState(null);
+  const [uploadSuccess, setUploadSuccess] = useState('');
   const rowsPerPage = 10;
 
   useEffect(() => {
@@ -121,6 +130,7 @@ export default function App() {
       complete: (results) => {
         setDetectedColumns(results.meta.fields);
         handleDataLoad(results.data);
+        setUploadSuccess(`✓ ${file.name} — ${results.data.length} rows loaded`);
       }
     });
   };
@@ -136,6 +146,7 @@ export default function App() {
   const clearData = () => {
     setCustomers([]);
     setDetectedColumns(null);
+    setUploadSuccess('');
     localStorage.removeItem('churniq_customers');
   };
 
@@ -267,10 +278,10 @@ export default function App() {
           <div className="builder-info">
             Built by Huzefa Haveliwala
             <a href="https://linkedin.com/in/huzefa-haveliwala" target="_blank" rel="noreferrer" className="builder-link" title="LinkedIn">
-              in
+              <Linkedin size={18} />
             </a>
             <a href="https://github.com/HuzefaH10/churn-risk-dashboard" target="_blank" rel="noreferrer" className="builder-link" title="GitHub">
-              gh
+              <Github size={18} />
             </a>
           </div>
         </div>
@@ -304,9 +315,16 @@ export default function App() {
         ) : (
           <>
             {detectedColumns && (
-              <div className="info-banner">
-                <Check size={18} />
-                Columns detected: {detectedColumns.join(', ')}. Missing columns use defaults.
+              <div className="info-banner" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.5rem' }}>
+                {uploadSuccess && (
+                  <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {uploadSuccess}
+                  </div>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Check size={18} />
+                  Columns detected: {detectedColumns.join(', ')}. Missing columns use defaults.
+                </div>
               </div>
             )}
 
@@ -366,6 +384,15 @@ export default function App() {
                         {chartDataPie.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
+                        <Label
+                          position="center"
+                          content={({ viewBox: { cx, cy } }) => (
+                            <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
+                              <tspan x={cx} dy="-0.2em" fontSize="24" fontWeight="bold" fill="#f3f4f6">{stats.total}</tspan>
+                              <tspan x={cx} dy="1.2em" fontSize="12" fill="#9ca3af">customers</tspan>
+                            </text>
+                          )}
+                        />
                       </Pie>
                       <RechartsTooltip 
                         contentStyle={{ backgroundColor: '#0f1420', borderColor: '#1f2937', color: '#f3f4f6' }} 
@@ -392,6 +419,13 @@ export default function App() {
                         {chartDataBar.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.fill} />
                         ))}
+                        <LabelList 
+                          dataKey="revenue" 
+                          position="top" 
+                          formatter={(val) => `AED ${val.toLocaleString()}`} 
+                          fill="#9ca3af" 
+                          fontSize={12}
+                        />
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
@@ -463,6 +497,7 @@ export default function App() {
                             {c.risk_level === 'High' ? '🔴' : c.risk_level === 'Medium' ? '🟡' : '🟢'} {c.risk_level}
                           </span>
                           {c.contacted && <span className="badge low" style={{marginLeft: '0.5rem'}}>✓ Contacted</span>}
+                          {c.dismissed && <span className="badge" style={{marginLeft: '0.5rem', backgroundColor: '#374151', color: '#d1d5db'}}>Dismissed</span>}
                         </td>
                         <td style={{fontWeight: 500}}>{c.name}</td>
                         <td>{c.plan}</td>
@@ -611,17 +646,19 @@ export default function App() {
                     updateCustomer({...selectedCustomer, contacted: true});
                   }}
                   disabled={selectedCustomer.contacted}
-                  style={selectedCustomer.contacted ? {opacity: 0.5, cursor: 'not-allowed'} : {}}
+                  style={selectedCustomer.contacted ? {backgroundColor: '#374151', color: '#9ca3af', cursor: 'not-allowed'} : {}}
                 >
-                  <Check size={18}/> {selectedCustomer.contacted ? 'Contacted' : 'Mark as Contacted'}
+                  {selectedCustomer.contacted ? 'Contacted ✓' : <><Check size={18}/> Mark as Contacted</>}
                 </button>
                 <button 
                   className="action-btn btn-secondary"
                   onClick={() => {
-                    updateCustomer({...selectedCustomer, risk_level: 'Low', health_score: Math.max(70, selectedCustomer.health_score)});
+                    updateCustomer({...selectedCustomer, dismissed: true});
                   }}
+                  disabled={selectedCustomer.dismissed}
+                  style={selectedCustomer.dismissed ? {opacity: 0.5, cursor: 'not-allowed'} : {}}
                 >
-                  Dismiss Risk
+                  {selectedCustomer.dismissed ? 'Risk Dismissed' : 'Dismiss Risk'}
                 </button>
                 <button 
                   className="action-btn btn-secondary"

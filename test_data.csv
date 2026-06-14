@@ -1,0 +1,4 @@
+customer_id,name,plan,monthly_revenue,last_login_days,usage_score,support_tickets,contract_months_remaining
+101,Tech Solutions,Pro,500,2,80,0,12
+102,Global Corp,Enterprise,3000,45,25,5,1
+103,Local Shop,Starter,100,10,60,1,6
