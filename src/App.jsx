@@ -4,7 +4,7 @@ import { jsPDF } from 'jspdf';
 import {
   Shield, Users, TrendingDown, HeartPulse, AlertTriangle,
   UploadCloud, Search, ArrowUpDown, X, FileDown, Check,
-  Linkedin, Github
+  Linkedin, Github, Eye
 } from 'lucide-react';
 import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis,
@@ -37,8 +37,8 @@ const SAMPLE_DATA = [
 
 const COLORS = {
   high: '#ef4444',
-  medium: '#f59e0b',
-  low: '#10b981',
+  medium: '#7c3aed',
+  low: '#0ea5e9',
 };
 
 const calculateRisk = (c) => {
@@ -254,13 +254,13 @@ export default function App() {
   };
 
   const getHealthColor = (score) => {
-    if (score > 60) return 'text-green';
-    if (score >= 40) return 'text-amber';
+    if (score >= 70) return 'text-sky';
+    if (score >= 40) return 'text-violet';
     return 'text-red';
   };
   const getHealthBorder = (score) => {
-    if (score > 60) return 'border-green';
-    if (score >= 40) return 'border-amber';
+    if (score >= 70) return 'border-sky';
+    if (score >= 40) return 'border-violet';
     return 'border-red';
   };
 
@@ -351,7 +351,7 @@ export default function App() {
                   <span className="stat-title">Revenue at Risk</span>
                   <TrendingDown className="stat-icon" size={20} color={COLORS.medium} />
                 </div>
-                <div className="stat-value text-amber">
+                <div className="stat-value text-violet">
                   AED {stats.atRiskRevenue.toLocaleString()}
                 </div>
                 <div className="stat-subtext">/ month at risk</div>
@@ -494,7 +494,7 @@ export default function App() {
                       <tr key={c.id}>
                         <td>
                           <span className={`badge ${c.risk_level.toLowerCase()}`}>
-                            {c.risk_level === 'High' ? '🔴' : c.risk_level === 'Medium' ? '🟡' : '🟢'} {c.risk_level}
+                            {c.risk_level === 'High' ? '🔴' : c.risk_level === 'Medium' ? '🟣' : '🔵'} {c.risk_level}
                           </span>
                           {c.contacted && <span className="badge low" style={{marginLeft: '0.5rem'}}>✓ Contacted</span>}
                           {c.dismissed && <span className="badge" style={{marginLeft: '0.5rem', backgroundColor: '#374151', color: '#d1d5db'}}>Dismissed</span>}
@@ -502,7 +502,7 @@ export default function App() {
                         <td style={{fontWeight: 500}}>{c.name}</td>
                         <td>{c.plan}</td>
                         <td style={{fontWeight: 600}}>AED {c.monthly_revenue}</td>
-                        <td className={c.last_login_days > 30 ? 'text-red' : c.last_login_days >= 15 ? 'text-amber' : 'text-green'}>
+                        <td className={c.last_login_days > 30 ? 'text-red' : c.last_login_days >= 15 ? 'text-violet' : 'text-sky'}>
                           {c.last_login_days} days ago
                         </td>
                         <td>
@@ -510,23 +510,25 @@ export default function App() {
                             <span>{c.usage_score}</span>
                             <div className="progress-bar-container">
                               <div 
-                                className={`progress-bar ${c.usage_score < 30 ? 'bg-red' : c.usage_score <= 60 ? 'bg-amber' : 'bg-green'}`} 
+                                className={`progress-bar ${c.usage_score < 30 ? 'bg-red' : c.usage_score <= 60 ? 'bg-violet' : 'bg-sky'}`} 
                                 style={{width: `${c.usage_score}%`}}
                               ></div>
                             </div>
                           </div>
                         </td>
-                        <td className={c.support_tickets > 3 ? 'text-red' : c.support_tickets >= 1 ? 'text-amber' : 'text-green'}>
+                        <td className={c.support_tickets > 3 ? 'text-red' : c.support_tickets >= 1 ? 'text-violet' : 'text-sky'}>
                           {c.support_tickets}
                         </td>
-                        <td className={c.contract_months_remaining < 2 ? 'text-red' : c.contract_months_remaining <= 4 ? 'text-amber' : 'text-green'}>
+                        <td className={c.contract_months_remaining < 2 ? 'text-red' : c.contract_months_remaining <= 4 ? 'text-violet' : 'text-sky'}>
                           {c.contract_months_remaining} mos
                         </td>
                         <td className={getHealthColor(c.health_score)} style={{fontSize: '1.125rem', fontWeight: 700}}>
                           {c.health_score}
                         </td>
                         <td>
-                          <button className="view-btn" onClick={() => setSelectedCustomer(c)}>View Details</button>
+                          <button className="view-icon-btn" title="View Details" onClick={() => setSelectedCustomer(c)}>
+                            <Eye size={18} />
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -563,7 +565,7 @@ export default function App() {
                 <div className="modal-title">{selectedCustomer.name}</div>
                 <div style={{display: 'flex', gap: '0.5rem', alignItems: 'center'}}>
                   <span className={`badge ${selectedCustomer.risk_level.toLowerCase()}`}>
-                    {selectedCustomer.risk_level === 'High' ? '🔴' : selectedCustomer.risk_level === 'Medium' ? '🟡' : '🟢'} {selectedCustomer.risk_level} Risk
+                    {selectedCustomer.risk_level === 'High' ? '🔴' : selectedCustomer.risk_level === 'Medium' ? '🟣' : '🔵'} {selectedCustomer.risk_level} Risk
                   </span>
                   <span className="text-muted" style={{fontSize: '0.875rem'}}>{selectedCustomer.plan} Plan</span>
                 </div>
@@ -601,12 +603,12 @@ export default function App() {
                 <ul className="risk-factors-list">
                   {selectedCustomer.last_login_days > 30 && <li className="border-red">⚠️ No login in {selectedCustomer.last_login_days} days — disengagement signal</li>}
                   {selectedCustomer.usage_score < 30 && <li className="border-red">⚠️ Usage score critically low ({selectedCustomer.usage_score}/100)</li>}
-                  {selectedCustomer.support_tickets > 3 && <li className="border-amber">⚠️ High support volume ({selectedCustomer.support_tickets} tickets) — frustration signal</li>}
-                  {selectedCustomer.contract_months_remaining < 2 && <li className="border-amber">⚠️ Contract expires in {selectedCustomer.contract_months_remaining} months — renewal risk</li>}
-                  {selectedCustomer.monthly_revenue < 50 && <li className="border-amber">⚠️ Low revenue tier — lower switching cost</li>}
+                  {selectedCustomer.support_tickets > 3 && <li className="border-violet">⚠️ High support volume ({selectedCustomer.support_tickets} tickets) — frustration signal</li>}
+                  {selectedCustomer.contract_months_remaining < 2 && <li className="border-violet">⚠️ Contract expires in {selectedCustomer.contract_months_remaining} months — renewal risk</li>}
+                  {selectedCustomer.monthly_revenue < 50 && <li className="border-violet">⚠️ Low revenue tier — lower switching cost</li>}
                   
                   {selectedCustomer.last_login_days <= 30 && selectedCustomer.usage_score >= 30 && selectedCustomer.support_tickets <= 3 && selectedCustomer.contract_months_remaining >= 2 && selectedCustomer.monthly_revenue >= 50 && (
-                    <li className="border-green">✅ No significant risk factors detected</li>
+                    <li className="border-sky">✅ No significant risk factors detected</li>
                   )}
                 </ul>
               </div>
@@ -624,16 +626,16 @@ export default function App() {
                   )}
                   {selectedCustomer.risk_level === 'Medium' && (
                     <>
-                      <li className="border-amber">Send a check-in email with tips to improve usage</li>
-                      <li className="border-amber">Invite to upcoming webinar or product training</li>
-                      <li className="border-amber">Review their use case and suggest relevant features</li>
+                      <li className="border-violet">Send a check-in email with tips to improve usage</li>
+                      <li className="border-violet">Invite to upcoming webinar or product training</li>
+                      <li className="border-violet">Review their use case and suggest relevant features</li>
                     </>
                   )}
                   {selectedCustomer.risk_level === 'Low' && (
                     <>
-                      <li className="border-green">Identify upsell opportunity — consider proposing plan upgrade</li>
-                      <li className="border-green">Request a testimonial or case study</li>
-                      <li className="border-green">Enroll in loyalty/referral program</li>
+                      <li className="border-sky">Identify upsell opportunity — consider proposing plan upgrade</li>
+                      <li className="border-sky">Request a testimonial or case study</li>
+                      <li className="border-sky">Enroll in loyalty/referral program</li>
                     </>
                   )}
                 </ul>

@@ -4,8 +4,8 @@
   --surface-secondary: #151c2c;
   --accent-color: #3b82f6;
   --high-risk: #ef4444;
-  --medium-risk: #f59e0b;
-  --low-risk: #10b981;
+  --medium-risk: #7c3aed;
+  --low-risk: #0ea5e9;
   --neutral-color: #6b7280;
   --text-main: #f3f4f6;
   --text-muted: #9ca3af;
@@ -402,8 +402,8 @@ tbody tr:hover {
 }
 
 .badge.high { background-color: rgba(239, 68, 68, 0.15); color: var(--high-risk); }
-.badge.medium { background-color: rgba(245, 158, 11, 0.15); color: var(--medium-risk); }
-.badge.low { background-color: rgba(16, 185, 129, 0.15); color: var(--low-risk); }
+.badge.medium { background-color: rgba(124, 58, 237, 0.15); color: var(--medium-risk); }
+.badge.low { background-color: rgba(14, 165, 233, 0.15); color: var(--low-risk); }
 
 .progress-bar-container {
   width: 100px;
@@ -433,6 +433,24 @@ tbody tr:hover {
 .view-btn:hover {
   border-color: var(--accent-color);
   color: var(--accent-color);
+}
+
+.view-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--neutral-color);
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.view-icon-btn:hover {
+  color: var(--accent-color);
+  background-color: rgba(59, 130, 246, 0.1);
 }
 
 .pagination {
@@ -649,14 +667,14 @@ tbody tr:hover {
 
 /* Utilities */
 .text-red { color: var(--high-risk); }
-.text-amber { color: var(--medium-risk); }
-.text-green { color: var(--low-risk); }
+.text-violet { color: var(--medium-risk); }
+.text-sky { color: var(--low-risk); }
 .border-red { border-color: var(--high-risk); }
-.border-amber { border-color: var(--medium-risk); }
-.border-green { border-color: var(--low-risk); }
+.border-violet { border-color: var(--medium-risk); }
+.border-sky { border-color: var(--low-risk); }
 .bg-red { background-color: var(--high-risk); }
-.bg-amber { background-color: var(--medium-risk); }
-.bg-green { background-color: var(--low-risk); }
+.bg-violet { background-color: var(--medium-risk); }
+.bg-sky { background-color: var(--low-risk); }
 
 /* Responsive */
 @media (max-width: 1024px) {
