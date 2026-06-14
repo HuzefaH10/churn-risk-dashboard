@@ -37,7 +37,7 @@ const SAMPLE_DATA = [
 
 const COLORS = {
   high: '#dc2626',
-  medium: '#5b21b6',
+  medium: '#334155',
   low: '#0369a1',
 };
 
