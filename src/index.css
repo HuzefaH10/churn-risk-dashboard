@@ -3,9 +3,9 @@
   --surface-color: #0f1420;
   --surface-secondary: #151c2c;
   --accent-color: #3b82f6;
-  --high-risk: #ef4444;
-  --medium-risk: #7c3aed;
-  --low-risk: #0ea5e9;
+  --high-risk: #b91c1c;
+  --medium-risk: #5b21b6;
+  --low-risk: #0369a1;
   --neutral-color: #6b7280;
   --text-main: #f3f4f6;
   --text-muted: #9ca3af;
@@ -353,7 +353,7 @@ body {
 
 .table-wrapper {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 table {
@@ -364,7 +364,7 @@ table {
 
 th {
   background-color: rgba(21, 28, 44, 0.5);
-  padding: 1rem 1.5rem;
+  padding: 8px 12px;
   font-weight: 600;
   font-size: 0.875rem;
   color: var(--text-muted);
@@ -378,7 +378,7 @@ th:hover {
 }
 
 td {
-  padding: 1rem 1.5rem;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.875rem;
   white-space: nowrap;
@@ -401,9 +401,9 @@ tbody tr:hover {
   font-weight: 600;
 }
 
-.badge.high { background-color: rgba(239, 68, 68, 0.15); color: var(--high-risk); }
-.badge.medium { background-color: rgba(124, 58, 237, 0.15); color: var(--medium-risk); }
-.badge.low { background-color: rgba(14, 165, 233, 0.15); color: var(--low-risk); }
+.badge.high { background-color: rgba(185, 28, 28, 0.15); border: 1px solid rgba(185, 28, 28, 0.3); color: var(--high-risk); }
+.badge.medium { background-color: rgba(91, 33, 182, 0.15); border: 1px solid rgba(91, 33, 182, 0.3); color: var(--medium-risk); }
+.badge.low { background-color: rgba(3, 105, 161, 0.15); border: 1px solid rgba(3, 105, 161, 0.3); color: var(--low-risk); }
 
 .progress-bar-container {
   width: 100px;

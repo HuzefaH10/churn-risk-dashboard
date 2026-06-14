@@ -36,9 +36,9 @@ const SAMPLE_DATA = [
 ];
 
 const COLORS = {
-  high: '#ef4444',
-  medium: '#7c3aed',
-  low: '#0ea5e9',
+  high: '#b91c1c',
+  medium: '#5b21b6',
+  low: '#0369a1',
 };
 
 const calculateRisk = (c) => {
@@ -478,8 +478,8 @@ export default function App() {
                   <thead>
                     <tr>
                       <th onClick={() => toggleSort('risk_level')}>Risk <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
-                      <th onClick={() => toggleSort('name')}>Customer Name <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
-                      <th onClick={() => toggleSort('plan')}>Plan <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
+                      <th onClick={() => toggleSort('name')} style={{maxWidth: '160px'}}>Customer Name <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
+                      <th onClick={() => toggleSort('plan')} style={{maxWidth: '90px'}}>Plan <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
                       <th onClick={() => toggleSort('monthly_revenue')}>Monthly Revenue <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
                       <th onClick={() => toggleSort('last_login_days')}>Last Login <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
                       <th onClick={() => toggleSort('usage_score')}>Usage Score <ArrowUpDown size={12} style={{display:'inline', marginLeft:'4px'}}/></th>
@@ -499,8 +499,8 @@ export default function App() {
                           {c.contacted && <span className="badge low" style={{marginLeft: '0.5rem'}}>✓ Contacted</span>}
                           {c.dismissed && <span className="badge" style={{marginLeft: '0.5rem', backgroundColor: '#374151', color: '#d1d5db'}}>Dismissed</span>}
                         </td>
-                        <td style={{fontWeight: 500}}>{c.name}</td>
-                        <td>{c.plan}</td>
+                        <td style={{fontWeight: 500, maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={c.name}>{c.name}</td>
+                        <td style={{maxWidth: '90px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={c.plan}>{c.plan}</td>
                         <td style={{fontWeight: 600}}>AED {c.monthly_revenue}</td>
                         <td className={c.last_login_days > 30 ? 'text-red' : c.last_login_days >= 15 ? 'text-violet' : 'text-sky'}>
                           {c.last_login_days} days ago
